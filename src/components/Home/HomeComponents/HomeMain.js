@@ -13,11 +13,7 @@ const Container = styled.div`
     align-items:center;
 `
 const SearchBox = styled.div`
-    margin-top:10px;
     width:60%;
-    margin-left:20%;
-    margin-right:20%;
-    position: relative;
     background-color: #ffffff;
     padding: 20px;
     box-shadow: 0 6px 15px 2px rgba(0, 0, 0, 0.3);
@@ -30,7 +26,7 @@ const Wrapper = styled.div`
     align-items: center;
     justify-content:center;
     justify-content:${props => props.space ? 'space-between' : ''};
-    cursor:${props => props.cursor ? 'pointer' : ''};
+    cursor:${props => props.cursor ? props.cursor : ''};
     flex-wrap: wrap;
 `
 const Input = styled.input`
@@ -61,22 +57,50 @@ const H2 = styled.h2`
     padding:0;
     margin-left:22px;
 `
+const CurrentWeatcher = styled.div`
+    width:25%;
+    background-color: rgba(255,255,255,0.3);
+    padding: 140px;
+    box-shadow: 0 6px 15px 2px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    height: 80px;
+`
 
 class HomeMain extends Component {
+
+    componentDidMount = () => {
+        this.props.ongetCurrentWeather()
+    }
+
+    closeClass = () => {
+        this.props.onCloseClass(!this.props.close);
+    };
+
     
     render(){
+        const {currentWeatcher} = this.props
         return(
             <Container>
+                {
+                this.props.close ? null :
                 <SearchBox>
-                    <Wrapper space cursor>
+                    <Wrapper space cursor="pointer">
                         <H2>Znajdź miasto...</H2>
-                        <CircleIcon onClick={this.props.onToggleClass}/>
+                        <CircleIcon onClick={this.closeClass}/>
                     </Wrapper>
                     <Wrapper>
                         <Input placeholder="miasto..."></Input>
                         <SearchIcon />
                     </Wrapper>
                 </SearchBox>
+                }
+                <CurrentWeatcher>
+                    {/* <p>{Object.values(this.props.weatcher.clouds).map(elem => {
+                        return <p>{elem}</p>
+                    })}</p> */}
+                    {/* <p>{this.props.weatcher.clouds.all}</p> */}
+                    {JSON.stringify(this.props.weatcher.clouds)}
+                </CurrentWeatcher>
             </Container>
             
         );
@@ -84,13 +108,15 @@ class HomeMain extends Component {
 }
 const mapStateToProps = state => {
     return {
-        activeClass: state.toggle
+        close: state.close,
+        weatcher: state.currentWeatcher
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onToggleClass: (active) => dispatch(actionCreators.toggleClass(active)),
+        onCloseClass: (active) => dispatch(actionCreators.closeClass(active)),
+        ongetCurrentWeather: () => dispatch(actionCreators.getCurrentWeather())
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(HomeMain);

@@ -18,7 +18,7 @@ const Wrapper = styled.div`
     display:flex;
     align-items:center;
     justify-content:center;
-    width:${props => (props.width ? '1024' : '250')}px;
+    width:${props => (props.width ? props.width : '250')}px;
     justify-content:${props => (props.space ? 'space-between' : null)}; 
 `
 const Logo = styled.div`
@@ -61,7 +61,7 @@ class HomeHeader extends Component {
         }
         return (
             <Container>
-                <Wrapper width space>
+                <Wrapper width="1024" space>
                     <Wrapper>
                         <Logo img={sunImg}></Logo>
                         <p style={style}>WeatherApp</p>

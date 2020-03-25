@@ -1,3 +1,5 @@
 export{
-    toggleClass
+    toggleClass,
+    closeClass,
+    getCurrentWeather
 }from './actions';
