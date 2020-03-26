@@ -5,6 +5,7 @@ import refresh from '../../../assets/images/refresh.png';
 import search from '../../../assets/images/search.png';
 import { connect } from 'react-redux';
 import * as actionCreators from '../../store/index';
+import icons from './img';
 
 const Container = styled.div`
    display:flex;
@@ -21,6 +22,7 @@ const Wrapper = styled.div`
     width:${props => (props.width ? props.width : '250')}px;
     justify-content:${props => (props.space ? 'space-between' : null)}; 
 `
+{/* <AppLogo src={logo} alt="logo" /> */}
 const Logo = styled.div`
    background-image:url(${props => props.img});
    background-size: cover;
@@ -47,6 +49,11 @@ const Input = styled.input`
     outline: none;
     color: #333;
 `
+const P = styled.p`
+    font-weight: bold;
+    margin-left: 5%;
+`
+
 
 class HomeHeader extends Component {
 
@@ -55,23 +62,23 @@ class HomeHeader extends Component {
     };
 
     render() {
-        const style = {
-            fontWeight: 'bold',
-            marginLeft: '5%'
-        }
+        
+        
+
         return (
             <Container>
                 <Wrapper width="1024" space>
                     <Wrapper>
                         <Logo img={sunImg}></Logo>
-                        <p style={style}>WeatherApp</p>
+                        <P>WeatherApp</P>
                     </Wrapper>
                     <Wrapper>
                         <Logo size img={refresh}></Logo>
+                        {/* <img src="refresh.png"/> */}
                         { this.props.activeClass ? 
                         <Input placeholder="miasto..." type="search"></Input>
                         : null
-                        }
+                        } 
                         <Logo
                             size
                             img={search}
@@ -91,7 +98,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onToggleClass: (active) => dispatch(actionCreators.toggleClass(active)),
+        onToggleClass: (active) => dispatch(actionCreators.toggleClass(active))
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(HomeHeader);

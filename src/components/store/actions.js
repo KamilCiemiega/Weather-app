@@ -35,3 +35,25 @@ export const getCurrentWeather = () => {
             })
     }
 }
+
+export const setCurrentLocation = (res) => {
+    return {
+        type: actionTypes.SET_CURRENT_LOCAION,
+        currenLlocation:res
+
+    };
+};
+
+export const getCurrentLocation = () => {
+    const API_key = '6dfe1fd5-fe60-46fc-ae70-6949542e05c2';
+    return dispatch => {
+        axios.get(`https://graphhopper.com/api/1/geocode?q=berlin&locale=de&debug=true&key=${API_key}`)
+            .then ( response => {
+                dispatch(setCurrentLocation(response.data))
+                console.log(response.data);
+            }) 
+            .catch( error => {
+                console.log(error);
+            })
+    }
+}

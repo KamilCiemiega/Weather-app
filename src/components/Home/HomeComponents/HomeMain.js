@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import * as actionCreators from '../../store/index';
+import { Formik } from 'formik';
 import { CloseCircle } from '@styled-icons/evaicons-solid/CloseCircle';
 import { SearchAlt2 } from '@styled-icons/boxicons-regular/SearchAlt2'
 
@@ -29,9 +30,17 @@ const Wrapper = styled.div`
     cursor:${props => props.cursor ? props.cursor : ''};
     flex-wrap: wrap;
 `
+const Form = styled.form`
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    justify-content:${props => props.space ? 'space-between' : ''};
+    cursor:${props => props.cursor ? props.cursor : ''};
+    flex-wrap: wrap;
+`
 const Input = styled.input`
     margin-top:15px;
-    border: 1px solid #eaeaea;
+    border: ${props => props.error ? props.error : '1px solid #eaeaea'};
     border-radius: 8px;
     padding: 6px;
     font-size: 0.8rem;
@@ -70,36 +79,79 @@ class HomeMain extends Component {
 
     componentDidMount = () => {
         this.props.ongetCurrentWeather()
+        this.props.onGetCurrentLocation()
     }
 
     closeClass = () => {
         this.props.onCloseClass(!this.props.close);
     };
 
-    
+    // weatcherIcon = () => {
+    //     const {icon} = this.props
+    //     switch(icon.currently.icon){
+    //         case icon.currently.icon === "clear-day"
+    //             return 
+    //     }
+    // }
+
     render(){
         const {currentWeatcher} = this.props
+
+        const validate = values => {
+            const errors = {};
+            if(!values.city){
+                errors.city = 'Podaj miasto'
+            }
+            return errors;
+                
+        }
         return(
             <Container>
-                {
-                this.props.close ? null :
+                
                 <SearchBox>
                     <Wrapper space cursor="pointer">
                         <H2>Znajdź miasto...</H2>
                         <CircleIcon onClick={this.closeClass}/>
                     </Wrapper>
-                    <Wrapper>
-                        <Input placeholder="miasto..."></Input>
-                        <SearchIcon />
-                    </Wrapper>
+                    <Formik
+                    initialValues={{ city: "" }}
+                    validate={validate}
+                    
+                    onSubmit={(values) => {
+                        this.props.onGetCurrentLocation(values.city)
+                    }}>
+                        {({
+                                values,
+                                errors,
+                                touched,
+                                handleChange,
+                                handleBlur,
+                                handleSubmit,
+                                isSubmitting
+                            }) => (
+                        <Form onSubmit={handleSubmit}>
+                            <Input
+                                name="city"
+                                placeholder="miasto..."
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.city}
+                                error={touched.city && errors.city ? "1 px solid green" : null}>
+                            </Input>
+                            {
+                                errors.city && touched.city ?
+                                (
+                                    <p>{errors.city}</p>
+                                ): null
+                            }
+                        <SearchIcon onSubmit={isSubmitting}/>
+                        </Form>
+                        )}
+                    </Formik>
                 </SearchBox>
-                }
+                
                 <CurrentWeatcher>
-                    {/* <p>{Object.values(this.props.weatcher.clouds).map(elem => {
-                        return <p>{elem}</p>
-                    })}</p> */}
-                    {/* <p>{this.props.weatcher.clouds.all}</p> */}
-                    {JSON.stringify(this.props.weatcher.clouds)}
+                    {/* {JSON.stringify(this.props.weatcher.currently)} */}
                 </CurrentWeatcher>
             </Container>
             
@@ -116,7 +168,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onCloseClass: (active) => dispatch(actionCreators.closeClass(active)),
-        ongetCurrentWeather: () => dispatch(actionCreators.getCurrentWeather())
+        ongetCurrentWeather: () => dispatch(actionCreators.getCurrentWeather()),
+        onGetCurrentLocation: (city) => dispatch(actionCreators.getCurrentLocation(city))
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(HomeMain);

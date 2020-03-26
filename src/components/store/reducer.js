@@ -4,7 +4,7 @@ const initialState = {
     toggle:false,
     close:false,
     currentWeatcher:{},
-    comingWeatcher:{}
+    currentLocation:{}
 }
 
 const reducer = (state = initialState, action) => {
@@ -24,6 +24,11 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 currentWeatcher:action.currentWeatcher,
                 close:true
+            }
+        case actionTypes.SET_CURRENT_LOCAION:
+            return{
+                ...state,
+                currentLocation:action.currenLlocation
             }
         default:
             return state
