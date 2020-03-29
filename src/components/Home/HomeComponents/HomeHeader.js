@@ -5,7 +5,7 @@ import refresh from '../../../assets/images/refresh.png';
 import search from '../../../assets/images/search.png';
 import { connect } from 'react-redux';
 import * as actionCreators from '../../store/index';
-import icons from './img';
+
 
 const Container = styled.div`
    display:flex;
@@ -22,7 +22,6 @@ const Wrapper = styled.div`
     width:${props => (props.width ? props.width : '250')}px;
     justify-content:${props => (props.space ? 'space-between' : null)}; 
 `
-{/* <AppLogo src={logo} alt="logo" /> */}
 const Logo = styled.div`
    background-image:url(${props => props.img});
    background-size: cover;
@@ -73,8 +72,8 @@ class HomeHeader extends Component {
                         <P>WeatherApp</P>
                     </Wrapper>
                     <Wrapper>
-                        <Logo size img={refresh}></Logo>
-                        {/* <img src="refresh.png"/> */}
+                        {/* <Logo size img={refresh}></Logo> */}
+                        <img src="refresh.png"/>
                         { this.props.activeClass ? 
                         <Input placeholder="miasto..." type="search"></Input>
                         : null

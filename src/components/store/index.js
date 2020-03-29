@@ -2,5 +2,6 @@ export{
     toggleClass,
     closeClass,
     getCurrentWeather,
-    getCurrentLocation
+    getCurrentLocation,
+    getAirly
 }from './actions';
