@@ -2,35 +2,19 @@ import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 import { connect } from 'react-redux';
 import * as actionCreators from '../../store/index';
-import { Formik } from 'formik';
-import { CloseCircle } from '@styled-icons/evaicons-solid/CloseCircle';
-import { SearchAlt2 } from '@styled-icons/boxicons-regular/SearchAlt2';
-import clearDay from '../../../assets/images/weatcherIcons/clear-day.png';
-import cloudy from '../../../assets/images/weatcherIcons/cloudy.png';
-import cloudyCover from '../../../assets/images/cloudy.png';
-import pressure from '../../../assets/images/pressure.png';
-import sunDown from '../../../assets/images/sunDown.png';
-import sunRise from '../../../assets/images/sunRise.png';
-import wind from '../../../assets/images/wind.png';
-import humidity from '../../../assets/images/humidity.png';
-
+import HomeSearch from './HomeSearch';
+import * as weatherIcons from './WeatherIcons/Icons';
+import HomeSlider from './HomeSlider';
+import Spinner from './HomeSpinner';
 
 const Container = styled.div`
     width:100%;
-    height:85%;
+    height:89%;
     display:flex;
     justify-content:center;
     align-items:center;
+    flex-direction:column;
     font-family: 'Open Sans', sans-serif;
-`
-const SearchBox = styled.div`
-    width:60%;
-    background-color: #ffffff;
-    padding: 20px;
-    box-shadow: 0 6px 15px 2px rgba(0, 0, 0, 0.3);
-    margin: 25px 0;
-    border-radius: 8px;
-    height: 80px;
 `
 const Wrapper = styled.div`
     display: flex;
@@ -43,44 +27,9 @@ const Wrapper = styled.div`
     margin-bottom:${props => props.bottom ? '10' : ''}px;
     margin-bottom:${props => props.bottomMax ? '35' : ''}px;
     max-height:${props => props.maxHeight ? '100' : ''}px;
+    width:${props => props.width ? '620' : ''}px;
 `
-const Form = styled.form`
-    display: flex;
-    align-items: center;
-    justify-content:center;
-    justify-content:${props => props.space ? 'space-between' : ''};
-    cursor:${props => props.cursor ? props.cursor : ''};
-    flex-wrap: wrap;
-`
-const Input = styled.input`
-    margin-top:15px;
-    border: ${props => props.error ? props.error : '1px solid #eaeaea'};
-    border-radius: 8px;
-    padding: 6px;
-    font-size: 0.8rem;
-    outline: none;
-    color: #333;
-    width: 90%;
-`
-const CircleIcon = styled(CloseCircle)`
-  color:#fad168;
-  height:30px;
-  width:30px;
-`
-const SearchIcon = styled(SearchAlt2)`
-    color:#9e9c9c;
-    height:30px;
-    width:30px;
-    margin-top:12px;
-    cursor:pointer;
-`
-
-const H2 = styled.h2`
-    margin:0;
-    padding:0;
-    margin-left:22px;
-`
-const CurrentWeatcher = styled.div`
+const CurrentWeather = styled.div`
     display:flex;
     justify-content:center;
     align-items:center;
@@ -92,10 +41,10 @@ const CurrentWeatcher = styled.div`
     height: 360px;
     width:620px;
 `
-const Weatcher = styled.div`
-    max-width: ${props => props.max ? '120' : 'null'}px;
+const Weather = styled.div`
+    max-width: ${props => props.max ? '120' : ''}px;
 `
-const WeatcherIcon = styled.div`
+const WeatherIcon = styled.div`
     background-image:url(${props => props.img});
     background-size: cover;
     width:20px;
@@ -105,7 +54,7 @@ const WeatcherIcon = styled.div`
         css`
         width:100px;
         height:100px;
-        margin-top:20px;
+        margin-top:10px;
     `
     }
 `
@@ -117,14 +66,11 @@ const P = styled.p`
     font-size:${props => props.maxSize ? '80' : '15'}px;
     font-size:${props => props.size ? '40' : ''}px;
     margin-right:${props => props.maxRight ? '20' : ''}px;
-    margin-bottom:${props => props.bottom ? '15' : ''}px;
-`
-const Button = styled.button`
-    border:none;
-    background:white;
+    margin-bottom:${props => props.bottom ? '10' : ''}px;
+    margin-top:${props => props.top ? '10' : ''}px;
 `
 const AirlyElement = styled.div`
-    background: ${props => props.medium ? props.medium : 'rgb(209, 207, 30)'};
+    background: ${props => props.currentColor ? props.currentColor : ''};
     padding: 10px 5px;
     border-radius: 10px;
     margin: 8px 0;
@@ -136,176 +82,167 @@ const AirlyElement = styled.div`
 class HomeMain extends Component {
 
 
-    componentDidUpdate(newProps){
-        if(this.props.currentLocation !== newProps.currentLocation){
-           this.props.onGetCurrentWeather('ready',
-           this.props.currentLocation.hits[0].point.lat,
-           this.props.currentLocation.hits[0].point.lng)
-           this.props.onGetAirly(
-            this.props.currentLocation.hits[0].point.lat,
-            this.props.currentLocation.hits[0].point.lng
-           )
+    componentDidUpdate(newProps) {
+        if (this.props.currentLocation !== newProps.currentLocation && this.props.currentLocation.hits.length > 0 ) {
+            this.props.onGetCurrentWeather('ready',
+                this.props.currentLocation.hits[0].point.lat,
+                this.props.currentLocation.hits[0].point.lng)
+            
+            this.props.onGetAirly('airlyReady',
+                this.props.currentLocation.hits[0].point.lat,
+                this.props.currentLocation.hits[0].point.lng
+            )
         }
     }
 
-    closeClass = () => {
-        this.props.onCloseClass(!this.props.close);
-    };
-
     sunRise = () => {
-        if(this.props.status === 'ready'){
-            const timeStamp = this.props.weatcher.daily.data[0].sunriseTime;
+        if (this.props.status === 'ready') {
+            const timeStamp = this.props.weather.daily.data[0].sunriseTime;
             const date = new Date(timeStamp * 1000);
             const hours = "0" + date.getHours();
             const minutes = "0" + date.getMinutes();
             const formattedTime = hours + ':' + minutes.substr(-2);
             return formattedTime;
         }
-        
+
     }
     sunDown = () => {
-        if(this.props.status === 'ready'){
-            const timeStamp = this.props.weatcher.daily.data[0].sunsetTime;
+        if (this.props.status === 'ready') {
+            const timeStamp = this.props.weather.daily.data[0].sunsetTime;
             const date = new Date(timeStamp * 1000);
             const hours = date.getHours();
             const minutes = "0" + date.getMinutes();
             const formattedTime = hours + ':' + minutes.substr(-2);
             return formattedTime;
         }
-        
+
+    }
+    time = (number) => {
+        if (this.props.status === 'ready') {
+            const timeStamp = this.props.weather.hourly.data[number].time;
+            const date = new Date(timeStamp * 1000);
+            const hours = date.getHours();
+            const minutes = "0" + date.getMinutes();
+            const formattedTime = hours + ':' + minutes.substr(-2);
+            return formattedTime;
+        }
+
     }
 
-    weatcherIcon = () => {
-        const { status, weatcher } = this.props
+    weatherIcon = () => {
+        const { status, weather } = this.props
         switch (status === "ready") {
-            case weatcher.currently.icon === "clear-day":
-                return <WeatcherIcon size img={clearDay}></WeatcherIcon>
-                break;
-            case weatcher.currently.icon === "partly-cloudy-day":
-                return <WeatcherIcon size img={cloudy}></WeatcherIcon>
-                break;
+            case weather.currently.icon === "clear-day":
+                return <WeatherIcon size img={weatherIcons.clearDay}></WeatherIcon>
+            case weather.currently.icon === "partly-cloudy-day":
+                return <WeatherIcon size img={weatherIcons.partlyCloudyDay}></WeatherIcon>
+            case weather.currently.icon === "partly-cloudy-night":
+                return <WeatherIcon size img={weatherIcons.partlyCloudyNight}></WeatherIcon>
+            case weather.currently.icon === "clear-night":
+                return <WeatherIcon size img={weatherIcons.clearNight}></WeatherIcon>
+            case weather.currently.icon === "rain":
+                return <WeatherIcon size img={weatherIcons.rain}></WeatherIcon>
+            case weather.currently.icon === "snow":
+                return <WeatherIcon size img={weatherIcons.snow}></WeatherIcon>
+            case weather.currently.icon === "sleet":
+                return <WeatherIcon size img={weatherIcons.sleet}></WeatherIcon>
+            case weather.currently.icon === "wind":
+                return <WeatherIcon size img={weatherIcons.windy}></WeatherIcon>
+            case weather.currently.icon === "fog":
+                return <WeatherIcon size img={weatherIcons.fog}></WeatherIcon>
+            case weather.currently.icon === "cloudy":
+                return <WeatherIcon size img={weatherIcons.cloudy}></WeatherIcon>
         }
     }
+
 
     render() {
-        const { weatcher,currentLocation,airly } = this.props
+        const { weather, currentLocation, airly } = this.props
 
-        const validate = values => {
-            const errors = {};
-            if (!values.city) {
-                errors.city = 'Podaj miasto'
-            }
-            return errors;
-
-        }
         return (
             <Container>
-                {this.props.close ? null :
-                    <SearchBox>
-                        <Wrapper space cursor="pointer">
-                            <H2>Znajdź miasto...</H2>
-                            <CircleIcon onClick={this.closeClass} />
-                        </Wrapper>
-                        <Formik
-                            initialValues={{ city: "" }}
-                            validate={validate}
-
-                            onSubmit={(values) => {
-                                this.props.onGetCurrentLocation(values.city)
-                            }}>
-                            {({
-                                values,
-                                errors,
-                                touched,
-                                handleChange,
-                                handleBlur,
-                                handleSubmit,
-                                isSubmitting
-                            }) => (
-                                    <Form onSubmit={handleSubmit}>
-                                        <Input
-                                            name="city"
-                                            placeholder="miasto..."
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            value={values.city}
-                                            error={touched.city && errors.city ? "1 px solid green" : null}>
-                                        </Input>
-                                        {
-                                            errors.city && touched.city ?
-                                                (
-                                                    <p>{errors.city}</p>
-                                                ) : null
-                                        }
-                                        <Button onSubmit={isSubmitting} >
-                                            <SearchIcon></SearchIcon>
-                                        </Button>
-                                    </Form>
-                            )}
-                        </Formik>
-                        
-                    </SearchBox>
-                }
-                {   this.props.status === 'ready' && this.props.close ?
-                
-                    <CurrentWeatcher>
+                <HomeSearch />
+                {this.props.status === 'ready' && this.props.close && this.props.currentLocation.hits.length > 0 ?
+                    <CurrentWeather>
                         <Wrapper>
-                                <Weatcher>
-                                    <Wrapper>
-                                        <P size right>{currentLocation.hits[0].name}</P>
-                                    </Wrapper>
-                                    <Wrapper maxHeight>
-                                        {this.weatcherIcon()}
-                                        <P maxSize>
-                                            {Math.ceil((weatcher.currently.temperature - 32) / 1.8)}°
-                                        </P>
-                                        <P left bold>°C</P>
-                                        <P bold left right>/</P>
-                                        <P bold>°F</P>
-                                    </Wrapper>
-                                    <Wrapper bottomMax>
-                                        <P bottom>
-                                            {weatcher.currently.summary}
-                                        </P>
-                                    </Wrapper>
-                                    <Wrapper bottom>
-                                        <WeatcherIcon img={cloudyCover}/>
-                                        <P left maxRight>{weatcher.currently.cloudCover * 100}%</P>
-                                        <WeatcherIcon img={pressure}/>
-                                        <P left maxRight>{Math.floor(weatcher.currently.pressure)} hpa</P>
-                                        <WeatcherIcon img={humidity}/>
-                                        <P left maxRight>{weatcher.currently.humidity * 100}</P>
-                                    </Wrapper>
-                                    <Wrapper>
-                                        <WeatcherIcon img={sunRise}/>
-                                        <P left maxRight>{this.sunRise()}</P>
-                                        <WeatcherIcon img={sunDown}/>
-                                        <P left maxRight>{this.sunDown()}</P>
-                                        <WeatcherIcon img={wind}/>
-                                        <P left maxRight>{weatcher.currently.windSpeed} km/h</P>
-                                    </Wrapper>
-                                    
-                                </Weatcher>
-                            </Wrapper>
+                            <Weather>
+                                {currentLocation.hits ?
+                                <Wrapper>
+                                    <P size right>{currentLocation.hits[0].name}</P>
+                                </Wrapper>
+                                : null
+                                }   
+                                <Wrapper maxHeight>
+                                    {this.weatherIcon()}
+                                    <P maxSize>
+                                        {Math.ceil((weather.currently.temperature - 32) / 1.8)}°
+                                    </P>
+                                    <P left bold>°C</P>
+                                    <P bold left right>/</P>
+                                    <P bold>°F</P>
+                                </Wrapper>
+                                <Wrapper bottomMax>
+                                    <P bottom top>
+                                        {weather.currently.summary}
+                                    </P>
+                                </Wrapper>
+                                <Wrapper bottom>
+                                    <WeatherIcon img={weatherIcons.cloudyCover} />
+                                    <P left maxRight>{Math.floor(weather.currently.cloudCover * 100)}%</P>
+                                    <WeatherIcon img={weatherIcons.pressure} />
+                                    <P left maxRight>{Math.floor(weather.currently.pressure)} hpa</P>
+                                    <WeatherIcon img={weatherIcons.humidity} />
+                                    <P left maxRight>{Math.floor(weather.currently.humidity * 100)}</P>
+                                </Wrapper>
+                                <Wrapper>
+                                    <WeatherIcon img={weatherIcons.sunRise} />
+                                    <P left maxRight>{this.sunRise()}</P>
+                                    <WeatherIcon img={weatherIcons.sunDown} />
+                                    <P left maxRight>{this.sunDown()}</P>
+                                    <WeatherIcon img={weatherIcons.wind} />
+                                    <P left maxRight>{weather.currently.windSpeed} km/h</P>
+                                </Wrapper>
+                            </Weather>
+                        </Wrapper>
+                        {weather.timezone === "Europe/Warsaw" && this.props.airlyStatus === "airlyReady" ?
+                            <Wrapper>
+                            {airly.current.indexes[0].lavel !== "UNKNOWN" ?
                             <Wrapper column>
-                            {/* #efbd11 */}
-                                <AirlyElement >
-                                    <P>PM1</P>
-                                    {airly.current.values[0].value}
-                                </AirlyElement>
-                                <AirlyElement >
-                                    <P>PM25</P>
-                                    {airly.current.values[1].value}
-                                </AirlyElement>
-                                <AirlyElement>
-                                    <P>PM10</P>
-                                    {airly.current.values[2].value}
-                                </AirlyElement>
+                                {airly.current.values[0] !== undefined ?
+                                    <AirlyElement currentColor={airly.current.indexes[0].color ? airly.current.indexes[0].color : ''}>
+                                        <P>PM1</P>
+                                        {airly.current.values[0].value}
+                                    </AirlyElement>
+                                    : null
+                                }
+                                {airly.current.values[1] !== undefined ?
+                                    <AirlyElement currentColor={airly.current.indexes[0].color ? airly.current.indexes[0].color : ''}>
+                                        <P>PM25</P>
+                                        {airly.current.values[1].value}
+                                    </AirlyElement>
+                                    : null
+                                }
+                                {airly.current.values[2] !== undefined ?
+                                    <AirlyElement currentColor={airly.current.indexes[0].color ? airly.current.indexes[0].color : ''}>
+                                        <P>PM10</P>
+                                        {airly.current.values[2].value}
+                                    </AirlyElement>
+                                    : null
+                                }
                             </Wrapper>
-                    </CurrentWeatcher>
-                    : null
+                            : null
+                            }
+                            </Wrapper>
+                            : null
+                        }
+                    </CurrentWeather>
+                    : <Spinner />
                 }
-                
+                {this.props.status === 'ready' && this.props.close ?
+                    <HomeSlider />
+                : null
+                }
+                <P size>{this.props.error}</P>
             </Container>
 
         );
@@ -314,19 +251,19 @@ class HomeMain extends Component {
 const mapStateToProps = state => {
     return {
         close: state.close,
-        weatcher: state.currentWeatcher,
+        weather: state.currentWeather,
         status: state.loadStatus,
         currentLocation: state.currentLocation,
-        airly: state.airly
+        airly: state.airly,
+        airlyStatus: state.airlyStatus,
+        error:state.error
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onCloseClass: (active) => dispatch(actionCreators.closeClass(active)),
-        onGetCurrentWeather: (status,lng,lat) => dispatch(actionCreators.getCurrentWeather(status,lng,lat)),
-        onGetCurrentLocation: (city) => dispatch(actionCreators.getCurrentLocation(city)),
-        onGetAirly: (lng,lat) => dispatch(actionCreators.getAirly(lng,lat)),
+        onGetCurrentWeather: (status, lng, lat) => dispatch(actionCreators.getCurrentWeather(status, lng, lat)),
+        onGetAirly: (status, lng, lat) => dispatch(actionCreators.getAirly(status,lng, lat))
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(HomeMain);

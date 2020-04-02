@@ -3,5 +3,9 @@ export{
     closeClass,
     getCurrentWeather,
     getCurrentLocation,
-    getAirly
+    getAirly,
+    getAutoLocalization,
+    nextPage,
+    previousPage,
+    errorMessage
 }from './actions';

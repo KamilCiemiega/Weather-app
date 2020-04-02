@@ -15,10 +15,10 @@ export const closeClass = (active) => {
     }
 }
 
-export const setCurrentWeatcher = (res,status) => {
+export const setCurrentWeather = (res,status) => {
     return {
-        type: actionTypes.SET_CURRENT_WEATCHER,
-        currentWeatcher:res,
+        type: actionTypes.SET_CURRENT_WEATHER,
+        currentWeather:res,
         loadStatus:status
     };
 };
@@ -28,7 +28,7 @@ export const getCurrentWeather = (status,lng,lat) => {
     return dispatch => {
         axios.get(`https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/${API_key}/${lng},${lat}`)
             .then ( response => {
-                dispatch(setCurrentWeatcher(response.data,status))
+                dispatch(setCurrentWeather(response.data,status))
             }) 
             .catch( error => {
                 console.log(error);
@@ -38,7 +38,7 @@ export const getCurrentWeather = (status,lng,lat) => {
 
 export const setCurrentLocation = (res,city) => {
     return {
-        type: actionTypes.SET_CURRENT_LOCAION,
+        type: actionTypes.SET_CURRENT_LOCATION,
         currenLlocation:res,
         currentCity:city
     };
@@ -52,28 +52,66 @@ export const getCurrentLocation = (city) => {
                 dispatch(setCurrentLocation(response.data,city))
             }) 
             .catch( error => {
-                console.log(error);
+                console.log(error)
             })
     }
 }
 
-export const setAirly = (res) => {
+export const setAirly = (res,status) => {
     return {
         type: actionTypes.SET_AIRLY,
-        airlyStatus:res
+        airly:res,
+        airlyStatus:status
     };
 };
 
-export const getAirly = (lat,lng) => {
+export const getAirly = (status,lat,lng) => {
     const API_key = 'dQnvbbAkXgIFwVA3eGBQNCAQMQdiLWLk';
     return dispatch => {
         axios.get(`https://airapi.airly.eu/v2/measurements/nearest?apikey=${API_key}&Accept=application/json&lat=${lat}&lng=${lng}&maxDistanceKM=20`)
             .then ( response => {
-                dispatch(setAirly(response.data))
-                console.log(response.data);
+                dispatch(setAirly(response.data,status))
             }) 
             .catch( error => {
                 console.log(error);
             })
     }
 }
+
+export const setautoLocalization = (res) => {
+    return {
+        type: actionTypes.SET_AUTO_LOCALIZATION,
+        autoLocalization:res
+    };
+};
+
+export const getAutoLocalization = () => {
+    return dispatch => {
+        axios.get(`http://ip-api.com/json/?fields=country,city,lat,lon`)
+            .then ( response => {
+                dispatch(setautoLocalization(response.data))
+            }) 
+            .catch( error => {
+                console.log(error);
+            })
+    }
+}
+
+export const nextPage = () => {
+    return {
+        type: actionTypes.NEXT_PAGE,
+        currentPage:4
+    };
+};
+export const previousPage = () => {
+    return {
+        type: actionTypes.PREVIOUS_PAGE,
+        currentPage:4
+    };
+};
+export const errorMessage = (err) => {
+    return {
+        type: actionTypes.ERROR_MESSAGE,
+        error:err
+    };
+};

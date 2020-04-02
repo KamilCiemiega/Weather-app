@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 import sunImg from '../../../assets/images/sunGif.gif';
-import refresh from '../../../assets/images/refresh.png';
 import search from '../../../assets/images/search.png';
+import localization from '../../../assets/images/place.png';
 import { connect } from 'react-redux';
 import * as actionCreators from '../../store/index';
+import { Formik } from 'formik';
 
 
 const Container = styled.div`
@@ -19,8 +20,10 @@ const Wrapper = styled.div`
     display:flex;
     align-items:center;
     justify-content:center;
-    width:${props => (props.width ? props.width : '250')}px;
-    justify-content:${props => (props.space ? 'space-between' : null)}; 
+    flex-direction:${props => props.column ? 'column' : ''};
+    width:${props => (props.width ? props.width : '300')}px;
+    justify-content:${props => (props.space ? 'space-between' : '')};
+    margin-right:${props => props.right ? props.right : ''}px;
 `
 const Logo = styled.div`
    background-image:url(${props => props.img});
@@ -30,12 +33,13 @@ const Logo = styled.div`
    height:50px;
    display:flex;
    font-weight:bold;
+    margin-right:${props => props.right ? '20' : ''}px;
+    margin-bottom:${props => props.bottom ? '5' : ''}px;
    ${props =>
         props.size &&
         css`
         width: 20px;
         height:20px;
-        margin-right:20px;
     `
     }
 `
@@ -49,55 +53,118 @@ const Input = styled.input`
     color: #333;
 `
 const P = styled.p`
-    font-weight: bold;
-    margin-left: 5%;
+    font-weight:${props => props.bold ? 'bold' : 'null'};
+    font-size:${props => props.size ? '12px' : ''};
+    margin:0;
+`
+const Button = styled.button`
+    border:none;
+    background:transparent;
+`
+const Form = styled.form`
+ display:flex;
+ justify-content:center;
+ align-items:center;
 `
 
 
 class HomeHeader extends Component {
+
+    componentDidUpdate(newProps) {
+        if (this.props.localization !== newProps.localization) {
+            this.props.onGetCurrentLocation(this.props.localization.city)
+
+            this.props.onGetCurrentWeather('ready',
+                this.props.localization.lat,
+                this.props.localization.lon)
+
+            this.props.onGetAirly('airlyReady',
+                this.props.localization.lat,
+                this.props.localization.lon
+            )
+        }
+    }
 
     toggleClass = () => {
         this.props.onToggleClass(!this.props.activeClass);
     };
 
     render() {
-        
-        
 
         return (
             <Container>
-                <Wrapper width="1024" space>
-                    <Wrapper>
-                        <Logo img={sunImg}></Logo>
-                        <P>WeatherApp</P>
-                    </Wrapper>
-                    <Wrapper>
-                        {/* <Logo size img={refresh}></Logo> */}
-                        <img src="refresh.png"/>
-                        { this.props.activeClass ? 
-                        <Input placeholder="miasto..." type="search"></Input>
-                        : null
-                        } 
-                        <Logo
-                            size
-                            img={search}
-                            onClick={this.toggleClass}>
-                        </Logo>
-                    </Wrapper>
-                </Wrapper>
+                <Formik
+                    initialValues={{ city: "" }}
+                    onSubmit={(values) => {
+                        this.props.onGetCurrentLocation(values.city)
+                        this.toggleClass()
+                    }}>
+                    {({
+                        values,
+                        handleChange,
+                        handleSubmit
+                    }) => (
+                            <Wrapper width="1024" space>
+                                <Wrapper>
+                                    <Logo img={sunImg}></Logo>
+                                    <P bold>WeatherApp</P>
+                                </Wrapper>
+                                <Wrapper>
+                                    <Wrapper
+                                        column
+                                        width="60"
+                                        right="15">
+                                        <Logo
+                                            img={localization}
+                                            size
+                                            onClick={this.props.onGetAutoLocalization}>
+                                        </Logo>
+                                        <P size>Find me</P>
+                                    </Wrapper>
+                                    <Form onSubmit={handleSubmit}>
+                                        {this.props.activeClass ?
+                                            <Input
+                                                name="city"
+                                                placeholder="city..."
+                                                type="search"
+                                                onChange={handleChange}
+                                                value={values.city}>
+                                            </Input>
+                                            : null
+                                        }
+                                        <Button
+                                        type="submit" >
+                                            <Logo
+                                                right
+                                                size
+                                                bottom
+                                                img={search}
+                                            >
+                                            </Logo>
+                                        </Button>
+                                    </Form>
+                                </Wrapper>
+                            </Wrapper>
+                        )}
+                </Formik>
             </Container>
         );
     }
 }
 const mapStateToProps = state => {
     return {
-        activeClass: state.toggle
+        activeClass: state.toggle,
+        localization: state.autoLocalization
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onToggleClass: (active) => dispatch(actionCreators.toggleClass(active))
+        onToggleClass: (active) => dispatch(actionCreators.toggleClass(active)),
+        onGetAutoLocalization: () => dispatch(actionCreators.getAutoLocalization()),
+        onGetCurrentWeather: (status, lng, lat) => dispatch(actionCreators.getCurrentWeather(status, lng, lat)),
+        onGetAirly: (status, lng, lat) => dispatch(actionCreators.getAirly(status, lng, lat)),
+        onGetCurrentLocation: (city) => dispatch(actionCreators.getCurrentLocation(city)),
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(HomeHeader);
