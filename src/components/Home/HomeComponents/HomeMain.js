@@ -5,7 +5,6 @@ import * as actionCreators from '../../store/index';
 import HomeSearch from './HomeSearch';
 import * as weatherIcons from './WeatherIcons/Icons';
 import HomeSlider from './HomeSlider';
-import Spinner from './HomeSpinner';
 
 const Container = styled.div`
     width:100%;
@@ -34,7 +33,7 @@ const CurrentWeather = styled.div`
     justify-content:center;
     align-items:center;
     justify-content: space-evenly;
-    color:white;
+    color:white; 
     background-color: rgba(255,255,255,0.3);
     box-shadow: 0 6px 15px 2px rgba(0, 0, 0, 0.3);
     border-radius: 8px;
@@ -154,19 +153,19 @@ class HomeMain extends Component {
                 return <WeatherIcon size img={weatherIcons.cloudy}></WeatherIcon>
         }
     }
-
-
+    
     render() {
         const { weather, currentLocation, airly } = this.props
 
         return (
             <Container>
                 <HomeSearch />
-                {this.props.status === 'ready' && this.props.close && this.props.currentLocation.hits.length > 0 ?
+                {this.Location}
+                {this.props.status === 'ready' && this.props.close && currentLocation.hits[0] ?
                     <CurrentWeather>
                         <Wrapper>
                             <Weather>
-                                {currentLocation.hits ?
+                                {currentLocation.hits[0] ?
                                 <Wrapper>
                                     <P size right>{currentLocation.hits[0].name}</P>
                                 </Wrapper>
@@ -175,11 +174,9 @@ class HomeMain extends Component {
                                 <Wrapper maxHeight>
                                     {this.weatherIcon()}
                                     <P maxSize>
-                                        {Math.ceil((weather.currently.temperature - 32) / 1.8)}°
+                                        {Math.ceil((weather.currently.temperature - 32) / 1.8)}
                                     </P>
-                                    <P left bold>°C</P>
-                                    <P bold left right>/</P>
-                                    <P bold>°F</P>
+                                    <P left maxSize>°C</P>
                                 </Wrapper>
                                 <Wrapper bottomMax>
                                     <P bottom top>
@@ -236,13 +233,12 @@ class HomeMain extends Component {
                             : null
                         }
                     </CurrentWeather>
-                    : <Spinner />
+                    : null
                 }
-                {this.props.status === 'ready' && this.props.close ?
+                {this.props.status === 'ready' && this.props.close && currentLocation.hits[0] ?
                     <HomeSlider />
                 : null
                 }
-                <P size>{this.props.error}</P>
             </Container>
 
         );

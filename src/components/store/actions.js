@@ -52,6 +52,7 @@ export const getCurrentLocation = (city) => {
                 dispatch(setCurrentLocation(response.data,city))
             }) 
             .catch( error => {
+                dispatch(errorMessage(error))
                 console.log(error)
             })
     }

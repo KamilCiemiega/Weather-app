@@ -125,7 +125,7 @@ class HomeSlider extends Component {
                         {this.weatherIcon(page1)}
                         <P >{weather.hourly.data[page1].summary}</P>
                         <P size>
-                            {Math.ceil((weather.currently.temperature - 32) / 1.8)}°
+                            {Math.ceil((weather.hourly.data[page1].temperature - 32) / 1.8)}°C
                         </P>
                         <P>{this.time(page1)}</P>
                     </Wrapper>
@@ -135,7 +135,7 @@ class HomeSlider extends Component {
                         {this.weatherIcon(page2)}
                         <P >{weather.hourly.data[page2].summary}</P>
                         <P size>
-                            {Math.ceil((weather.currently.temperature - 32) / 1.8)}°
+                        {Math.ceil((weather.hourly.data[page2].temperature - 32) / 1.8)}°C
                         </P>
                         <P>{this.time(page2)}</P>
                     </Wrapper>
@@ -145,7 +145,7 @@ class HomeSlider extends Component {
                         {this.weatherIcon(page3)}
                         <P >{weather.hourly.data[page3].summary}</P>
                         <P size>
-                            {Math.ceil((weather.currently.temperature - 32) / 1.8)}°
+                        {Math.ceil((weather.hourly.data[page3].temperature - 32) / 1.8)}°C
                         </P>
                         <P>{this.time(page3)}</P>
                     </Wrapper>
@@ -155,7 +155,7 @@ class HomeSlider extends Component {
                         {this.weatherIcon(page4)}
                         <P >{weather.hourly.data[page4].summary}</P>
                         <P size>
-                            {Math.ceil((weather.currently.temperature - 32) / 1.8)}°
+                            {Math.ceil((weather.hourly.data[page4].temperature - 32) / 1.8)}°C
                         </P>
                         <P>{this.time(page4)}</P>
                     </Wrapper>
