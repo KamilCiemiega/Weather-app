@@ -14,6 +14,12 @@ export const closeClass = (active) => {
         close:active
     }
 }
+export const showModal = (active) => {
+    return {
+        type: actionTypes.SHOW_MODAL,
+        show:active
+    }
+}
 
 export const setCurrentWeather = (res,status) => {
     return {
@@ -23,15 +29,25 @@ export const setCurrentWeather = (res,status) => {
     };
 };
 
+export const setSpinner = (status) => {
+    return {
+        type: actionTypes.SET_SPINNER,
+        loadingStatus:status
+    }
+}
+
 export const getCurrentWeather = (status,lng,lat) => {
     const API_key = 'e36dea0542af17ed989cfdd735524f1d';
     return dispatch => {
+        dispatch(setSpinner(true))
         axios.get(`https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/${API_key}/${lng},${lat}`)
             .then ( response => {
+                dispatch(setSpinner(false))
                 dispatch(setCurrentWeather(response.data,status))
             }) 
             .catch( error => {
-                console.log(error);
+                dispatch(errorMessage(error))
+                dispatch(showModal(true))
             })
     }
 }
@@ -53,7 +69,6 @@ export const getCurrentLocation = (city) => {
             }) 
             .catch( error => {
                 dispatch(errorMessage(error))
-                console.log(error)
             })
     }
 }
@@ -74,7 +89,7 @@ export const getAirly = (status,lat,lng) => {
                 dispatch(setAirly(response.data,status))
             }) 
             .catch( error => {
-                console.log(error);
+                dispatch(errorMessage(error))
             })
     }
 }
@@ -93,7 +108,8 @@ export const getAutoLocalization = () => {
                 dispatch(setautoLocalization(response.data))
             }) 
             .catch( error => {
-                console.log(error);
+                dispatch(errorMessage(error))
+                dispatch(showModal(true))
             })
     }
 }

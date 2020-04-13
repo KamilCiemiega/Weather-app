@@ -10,7 +10,7 @@ const Container = styled.div`
     background-size: cover;
 `
 
-const home = (props) => {
+const home = props => {
     return(
         <Container img={mainBackground}>
             <HomeHeader />

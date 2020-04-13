@@ -5,6 +5,11 @@ import * as actionCreators from '../../store/index';
 import HomeSearch from './HomeSearch';
 import * as weatherIcons from './WeatherIcons/Icons';
 import HomeSlider from './HomeSlider';
+import Spinner from './HomeSpinner';
+import ErrorModal from './HomeErrorModal';
+import clickIcon from '../../../assets/images/click.png';
+import { Link } from 'react-router-dom';
+
 
 const Container = styled.div`
     width:100%;
@@ -77,16 +82,27 @@ const AirlyElement = styled.div`
     min-width: 45px;
     color: black;
 `
-
+const IconWrapper = styled.div`
+    display:flex;
+    align-items:center;
+    justify-content:space-evenly;
+    background: #fad168;
+    border-radius: 15px;
+    justify-content: space-evenly;
+    width: 130px;
+    height: 30px;
+    cursor: pointer;
+    margin-top:35px;
+`
 class HomeMain extends Component {
 
 
     componentDidUpdate(newProps) {
-        if (this.props.currentLocation !== newProps.currentLocation && this.props.currentLocation.hits.length > 0 ) {
+        if (this.props.currentLocation !== newProps.currentLocation && this.props.currentLocation.hits.length > 0) {
             this.props.onGetCurrentWeather('ready',
                 this.props.currentLocation.hits[0].point.lat,
                 this.props.currentLocation.hits[0].point.lng)
-            
+
             this.props.onGetAirly('airlyReady',
                 this.props.currentLocation.hits[0].point.lat,
                 this.props.currentLocation.hits[0].point.lng
@@ -114,18 +130,6 @@ class HomeMain extends Component {
             const formattedTime = hours + ':' + minutes.substr(-2);
             return formattedTime;
         }
-
-    }
-    time = (number) => {
-        if (this.props.status === 'ready') {
-            const timeStamp = this.props.weather.hourly.data[number].time;
-            const date = new Date(timeStamp * 1000);
-            const hours = date.getHours();
-            const minutes = "0" + date.getMinutes();
-            const formattedTime = hours + ':' + minutes.substr(-2);
-            return formattedTime;
-        }
-
     }
 
     weatherIcon = () => {
@@ -153,10 +157,10 @@ class HomeMain extends Component {
                 return <WeatherIcon size img={weatherIcons.cloudy}></WeatherIcon>
         }
     }
-    
+
+
     render() {
         const { weather, currentLocation, airly } = this.props
-
         return (
             <Container>
                 <HomeSearch />
@@ -166,11 +170,11 @@ class HomeMain extends Component {
                         <Wrapper>
                             <Weather>
                                 {currentLocation.hits[0] ?
-                                <Wrapper>
-                                    <P size right>{currentLocation.hits[0].name}</P>
-                                </Wrapper>
-                                : null
-                                }   
+                                    <Wrapper>
+                                        <P size right>{currentLocation.hits[0].name}</P>
+                                    </Wrapper>
+                                    : null
+                                }
                                 <Wrapper maxHeight>
                                     {this.weatherIcon()}
                                     <P maxSize>
@@ -199,36 +203,42 @@ class HomeMain extends Component {
                                     <WeatherIcon img={weatherIcons.wind} />
                                     <P left maxRight>{weather.currently.windSpeed} km/h</P>
                                 </Wrapper>
+                                <Link to='/chart'style={{textDecoration: 'none', color:'white'}}>
+                                    <IconWrapper>
+                                        <WeatherIcon img={clickIcon} />
+                                        <P>More details</P>
+                                    </IconWrapper>
+                                </Link>
                             </Weather>
                         </Wrapper>
                         {weather.timezone === "Europe/Warsaw" && this.props.airlyStatus === "airlyReady" ?
                             <Wrapper>
-                            {airly.current.indexes[0].lavel !== "UNKNOWN" ?
-                            <Wrapper column>
-                                {airly.current.values[0] !== undefined ?
-                                    <AirlyElement currentColor={airly.current.indexes[0].color ? airly.current.indexes[0].color : ''}>
-                                        <P>PM1</P>
-                                        {airly.current.values[0].value}
-                                    </AirlyElement>
+                                {airly.current.indexes[0].lavel !== "UNKNOWN" ?
+                                    <Wrapper column>
+                                        {airly.current.values[0] !== undefined ?
+                                            <AirlyElement currentColor={airly.current.indexes[0].color ? airly.current.indexes[0].color : ''}>
+                                                <P>PM1</P>
+                                                {airly.current.values[0].value}
+                                            </AirlyElement>
+                                            : null
+                                        }
+                                        {airly.current.values[1] !== undefined ?
+                                            <AirlyElement currentColor={airly.current.indexes[0].color ? airly.current.indexes[0].color : ''}>
+                                                <P>PM25</P>
+                                                {airly.current.values[1].value}
+                                            </AirlyElement>
+                                            : null
+                                        }
+                                        {airly.current.values[2] !== undefined ?
+                                            <AirlyElement currentColor={airly.current.indexes[0].color ? airly.current.indexes[0].color : ''}>
+                                                <P>PM10</P>
+                                                {airly.current.values[2].value}
+                                            </AirlyElement>
+                                            : null
+                                        }
+                                    </Wrapper>
                                     : null
                                 }
-                                {airly.current.values[1] !== undefined ?
-                                    <AirlyElement currentColor={airly.current.indexes[0].color ? airly.current.indexes[0].color : ''}>
-                                        <P>PM25</P>
-                                        {airly.current.values[1].value}
-                                    </AirlyElement>
-                                    : null
-                                }
-                                {airly.current.values[2] !== undefined ?
-                                    <AirlyElement currentColor={airly.current.indexes[0].color ? airly.current.indexes[0].color : ''}>
-                                        <P>PM10</P>
-                                        {airly.current.values[2].value}
-                                    </AirlyElement>
-                                    : null
-                                }
-                            </Wrapper>
-                            : null
-                            }
                             </Wrapper>
                             : null
                         }
@@ -237,8 +247,10 @@ class HomeMain extends Component {
                 }
                 {this.props.status === 'ready' && this.props.close && currentLocation.hits[0] ?
                     <HomeSlider />
-                : null
+                    : null
                 }
+                {this.props.loading && <Spinner />}
+                <ErrorModal />
             </Container>
 
         );
@@ -252,14 +264,14 @@ const mapStateToProps = state => {
         currentLocation: state.currentLocation,
         airly: state.airly,
         airlyStatus: state.airlyStatus,
-        error:state.error
+        loading: state.loading
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
         onGetCurrentWeather: (status, lng, lat) => dispatch(actionCreators.getCurrentWeather(status, lng, lat)),
-        onGetAirly: (status, lng, lat) => dispatch(actionCreators.getAirly(status,lng, lat))
+        onGetAirly: (status, lng, lat) => dispatch(actionCreators.getAirly(status, lng, lat))
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(HomeMain);

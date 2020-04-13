@@ -109,6 +109,7 @@ class HomeHeader extends Component {
                                     <Logo img={sunImg}></Logo>
                                     <P bold>WeatherApp</P>
                                 </Wrapper>
+                                {this.props.close ?
                                 <Wrapper>
                                     <Wrapper
                                         column
@@ -144,6 +145,8 @@ class HomeHeader extends Component {
                                         </Button>
                                     </Form>
                                 </Wrapper>
+                                :null
+                                }
                             </Wrapper>
                         )}
                 </Formik>
@@ -153,6 +156,7 @@ class HomeHeader extends Component {
 }
 const mapStateToProps = state => {
     return {
+        close: state.close,
         activeClass: state.toggle,
         localization: state.autoLocalization
     }

@@ -7,5 +7,7 @@ export{
     getAutoLocalization,
     nextPage,
     previousPage,
-    errorMessage
+    errorMessage,
+    setSpinner,
+    showModal
 }from './actions';

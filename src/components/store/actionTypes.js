@@ -7,3 +7,5 @@ export const SET_AUTO_LOCALIZATION = "SET_AUTO_LOCALIZATION";
 export const NEXT_PAGE = "NEXT_PAGE";
 export const PREVIOUS_PAGE = "PREVIOUS_PAGE";
 export const ERROR_MESSAGE = "ERROR_MESSAGE";
+export const SET_SPINNER = "SET_SPINNER";
+export const SHOW_MODAL = "SHOW_MODAL";
