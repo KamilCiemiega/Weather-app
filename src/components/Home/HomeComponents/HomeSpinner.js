@@ -2,7 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 
 const homeSpinner = () => {
-    const Loader = styled.div` 
+    const Loader = styled.div`
+        position: fixed;
+        top: 30vh;
+        left: 50%;
+        z-index: 200;
         color: #ffffff;
         font-size: 90px;
         text-indent: -9999em;
@@ -11,7 +15,6 @@ const homeSpinner = () => {
         height: 1em;
         border-radius: 50%;
         margin: 72px auto;
-        position: relative;
         -webkit-transform: translateZ(0);
         -ms-transform: translateZ(0);
         transform: translateZ(0);

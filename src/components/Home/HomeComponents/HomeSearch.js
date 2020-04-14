@@ -3,7 +3,6 @@ import styled, { css } from 'styled-components';
 import { connect } from 'react-redux';
 import * as actionCreators from '../../store/index';
 import { Formik } from 'formik';
-import { CloseCircle } from '@styled-icons/evaicons-solid/CloseCircle';
 import { SearchAlt2 } from '@styled-icons/boxicons-regular/SearchAlt2';
 
 
@@ -61,11 +60,6 @@ const Input = styled.input`
     color: #333;
     width: 90%;
 `
-const CircleIcon = styled(CloseCircle)`
-  color:#fad168;
-  height:30px;
-  width:30px;
-`
 const SearchIcon = styled(SearchAlt2)`
     color:#9e9c9c;
     height:30px;
@@ -93,10 +87,6 @@ color:rgba(255,0,0, 1);
 
 class HomeSearch extends Component {
 
-    closeClass = () => {
-        this.props.onCloseClass(!this.props.close);
-    };
-
     render() {
 
         const validate = values => {
@@ -112,7 +102,6 @@ class HomeSearch extends Component {
                     <SearchBox>
                         <Wrapper space cursor="pointer">
                             <H2>Find city...</H2>
-                            <CircleIcon onClick={this.closeClass} />
                         </Wrapper>
                         <Formik
                             initialValues={{ city: "" }}
@@ -170,7 +159,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onCloseClass: (active) => dispatch(actionCreators.closeClass(active)),
         onGetCurrentLocation: (city) => dispatch(actionCreators.getCurrentLocation(city))
     }
 }

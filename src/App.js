@@ -23,7 +23,7 @@ function App() {
   return (
       <Wrapper>
          <HashRouter>
-           <Suspense fallback={<Spinner />}>
+           <Suspense fallback={<div>Loading...</div>}>
           <Switch>
             <Route exact path='/' component={Home} />
             <Route path='/chart' component={Chart} />

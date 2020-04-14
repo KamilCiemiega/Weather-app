@@ -83,14 +83,14 @@ const showModal = (state,action) => {
     return updateObject(state,{showModal:action.show})
 }
 
+const closeClass = (state,action) => {
+    return updateObject(state,{close:action.close})
+}
+
 const reducer = (state = initialState, action) => {
     switch(action.type){
         case actionTypes.TOGGLE_CLASS: return toggleClass(state,action);
-        case actionTypes.CLOSE_CLASS:
-            return{
-                ...state,
-                close:action.close
-            }
+        case actionTypes.CLOSE_CLASS: return  toggleClass(state,action);
         case actionTypes.SET_CURRENT_WEATHER: return setCurrentWeather(state,action);
         case actionTypes.SET_CURRENT_LOCATION: return setCurrentLocation(state,action);
         case actionTypes.SET_AIRLY: return setAirly(state,action);

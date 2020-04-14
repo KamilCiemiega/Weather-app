@@ -162,6 +162,8 @@ class HomeMain extends Component {
     render() {
         const { weather, currentLocation, airly } = this.props
         return (
+            <>
+            {this.props.loading && <Spinner />}
             <Container>
                 <HomeSearch />
                 {this.Location}
@@ -249,10 +251,9 @@ class HomeMain extends Component {
                     <HomeSlider />
                     : null
                 }
-                {this.props.loading && <Spinner />}
                 <ErrorModal />
             </Container>
-
+            </>
         );
     }
 }
