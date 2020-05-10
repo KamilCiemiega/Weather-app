@@ -9,5 +9,9 @@ export{
     previousPage,
     errorMessage,
     setSpinner,
-    showModal
+    showModal,
+    getCityName,
+    getFilteredSuggestions,
+    getformError,
+    getEmptySuggestions
 }from './actions';

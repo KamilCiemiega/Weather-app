@@ -9,3 +9,7 @@ export const PREVIOUS_PAGE = "PREVIOUS_PAGE";
 export const ERROR_MESSAGE = "ERROR_MESSAGE";
 export const SET_SPINNER = "SET_SPINNER";
 export const SHOW_MODAL = "SHOW_MODAL";
+export const CITY_NAME = "CITY_NAME";
+export const FILTERED_SUGGESTIONS = "FILTERED_SUGGESTIONS";
+export const FORM_ERROR = "FORM_ERROR";
+export const EMPTY_SUGGESTIONS = "EMPTY_SUGGESTIONS";

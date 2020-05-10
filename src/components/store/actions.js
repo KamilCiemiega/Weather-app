@@ -132,3 +132,25 @@ export const errorMessage = (err) => {
         error:err
     };
 };
+export const getCityName = (name) => {
+    return {
+        type: actionTypes.CITY_NAME,
+        city:name
+    }
+}
+export const getFilteredSuggestions = () => {
+    return {
+        type: actionTypes.FILTERED_SUGGESTIONS
+    }
+}
+export const getformError = (err) => {
+    return {
+        type: actionTypes.FORM_ERROR,
+        formError:err
+    }
+}
+export const getEmptySuggestions = () => {
+    return {
+        type: actionTypes.EMPTY_SUGGESTIONS,
+    }
+}
