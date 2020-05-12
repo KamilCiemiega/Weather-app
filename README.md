@@ -4,9 +4,13 @@ temperaturę,temperaturę odczuwalną,ciśnienie atmosferyczne,wilgotność,stop
 
 ### DEMO
 
-weather-app-88870.web.app
+https://weather-app-88870.web.app/#/
 
 ### UŻYTE TECHNOLOGIE
+
+### UŻYTE API
+
+![123](https://user-images.githubusercontent.com/55457173/81742723-db1cd700-94a0-11ea-8590-bbcc968e5fad.png)
 
 ### PREZENTACJA
 
@@ -20,6 +24,8 @@ Jeśli pogoda dotyczy polskiego miasta, z Airly zostają pobrane informacje o ja
 
 ### AUTOCOMPLETE
 
+![autocomplete](https://user-images.githubusercontent.com/55457173/81742634-b3c60a00-94a0-11ea-8fe9-ceb3660e6251.gif)
+
 Dla Polski zaimplementowany jest autocomplete który podpowiada nam nazwy miast.
 
 ### AUTOLOKALIZACJA
@@ -30,6 +36,8 @@ Następnie do Dark Sky API wysyłane są współrzędne geograficzne. Zwrotnie p
 
 Jeśli pogoda dotyczy polskiego miasta, z Airly zostają pobrane informacje o jakości powietrza i stężeniu pyłków PM1, PM2,5 i PM10 z czujników znajdujących się w danej miejscowości.
 
+![autoLocalization](https://user-images.githubusercontent.com/55457173/81742608-aad53880-94a0-11ea-9f94-cd9a6530a3e7.gif)
+
 ### REACT LAZY
 
-
+![details](https://user-images.githubusercontent.com/55457173/81742656-bf193580-94a0-11ea-8d0d-dd1de07b3e1f.gif)
