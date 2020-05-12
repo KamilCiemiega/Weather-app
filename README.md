@@ -8,6 +8,8 @@ https://weather-app-88870.web.app/#/
 
 ### UŻYTE TECHNOLOGIE
 
+![technology](https://user-images.githubusercontent.com/55457173/81743070-5b433c80-94a1-11ea-8eee-c7bd7ac53642.png)
+
 ### UŻYTE API
 
 ![123](https://user-images.githubusercontent.com/55457173/81742723-db1cd700-94a0-11ea-8590-bbcc968e5fad.png)
