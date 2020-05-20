@@ -108,12 +108,6 @@ const Li = styled.li`
 
 class HomeSearch extends Component {
 
-    state = {
-        city: "",
-        formError: false,
-        suggestions: []
-    }
-
     handleChange = values => {
         this.props.onGetCityName(values.target.value)
         
@@ -128,7 +122,7 @@ class HomeSearch extends Component {
     renderSuggestions = () => {
         const { filtredCityName } = this.props
         let chosenSuggestions = filtredCityName.slice(-5)
-        if (filtredCityName.length === 0) {
+        if (cityValue.length === 0) {
             return null;
         }
         return (
