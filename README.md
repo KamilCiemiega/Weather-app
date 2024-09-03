@@ -39,7 +39,3 @@ Następnie do Dark Sky API wysyłane są współrzędne geograficzne. Zwrotnie p
 Jeśli pogoda dotyczy polskiego miasta, z Airly zostają pobrane informacje o jakości powietrza i stężeniu pyłków PM1, PM2,5 i PM10 z czujników znajdujących się w danej miejscowości.
 
 ![autoLocalization](https://user-images.githubusercontent.com/55457173/81742608-aad53880-94a0-11ea-9f94-cd9a6530a3e7.gif)
-
-### REACT LAZY
-
-![details](https://user-images.githubusercontent.com/55457173/81742656-bf193580-94a0-11ea-8d0d-dd1de07b3e1f.gif)
