@@ -22,7 +22,7 @@ https://weather-app-88870.web.app/#/
 
 ### PRESENTATION
 
-MANUAL SEARCH
+### MANUAL SEARCH
 The city name is sent to Graphhopper. The service returns the country name and geographical coordinates.
 
 The geographical coordinates are sent to the Dark Sky API, which returns all the weather data.
