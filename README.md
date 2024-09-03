@@ -1,6 +1,12 @@
-Prosta aplikacja pogodowa dostaraczająca informacje o aktualnych danych metrologicznych.Aplikacja podaje takie informacje jak:
+The application provides information such as:
 
-temperaturę,temperaturę odczuwalną,ciśnienie atmosferyczne,wilgotność,stopień zachmurzenia,prędkość wiatru,dla Polskich miast poprzez serwis Airly podawany stopień zanieczyszczenia cząsteczkami PM1, PM2,5, PM10
+temperature
+feels-like temperature
+atmospheric pressure
+humidity
+cloud cover
+wind speed
+For Polish cities, the Airly service provides data on particulate matter pollution levels: PM1, PM2.5, PM10.
 
 ### DEMO
 
