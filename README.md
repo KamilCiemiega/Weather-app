@@ -12,36 +12,35 @@ For Polish cities, the Airly service provides data on particulate matter polluti
 
 https://weather-app-88870.web.app/#/
 
-### UŻYTE TECHNOLOGIE
+### TECHNOLOGIES USED
 
 ![technology](https://user-images.githubusercontent.com/55457173/81743070-5b433c80-94a1-11ea-8eee-c7bd7ac53642.png)
 
-### UŻYTE API
+### APIs USED
 
 ![123](https://user-images.githubusercontent.com/55457173/81742723-db1cd700-94a0-11ea-8590-bbcc968e5fad.png)
 
-### PREZENTACJA
+### PRESENTATION
 
-### RĘCZNE WYSZUKIWANIE
+MANUAL SEARCH
+The city name is sent to Graphhopper. The service returns the country name and geographical coordinates.
 
-Nazwa miasta wysyłana jest do Graphhopper. Serwis zwraca nazwę kraju i współrzędne geograficzne.
+The geographical coordinates are sent to the Dark Sky API, which returns all the weather data.
 
-Do Dark Sky API wysyłane są współrzędne geograficzne. Zwrotnie pobierane są wszystkie dane dotyczące pogody.
-
-Jeśli pogoda dotyczy polskiego miasta, z Airly zostają pobrane informacje o jakości powietrza i stężeniu pyłków PM1, PM2,5 i PM10 z czujników znajdujących się w danej miejscowości.
+If the weather data is for a Polish city, Airly provides information on air quality and particulate matter concentrations (PM1, PM2.5, PM10) from sensors located in that city.
 
 ### AUTOCOMPLETE
 
 ![autocomplete](https://user-images.githubusercontent.com/55457173/81742634-b3c60a00-94a0-11ea-8fe9-ceb3660e6251.gif)
 
-Dla Polski zaimplementowany jest autocomplete który podpowiada nam nazwy miast.
+Autocomplete is implemented for Poland, suggesting city names.
 
-### AUTOLOKALIZACJA
+### AUTOLOCALIZATION
 
-W pierwszej kolejności aplikacja wysyła zapytanie do ip-api, określając po numerze ip, rodzaj sieci z której wysłano zapytanie, współrzędne geograficzne, państwo i miasto. 
+First, the application sends a request to ip-api, determining the network type from which the request was sent, along with the geographical coordinates, country, and city based on the IP number.
 
-Następnie do Dark Sky API wysyłane są współrzędne geograficzne. Zwrotnie pobierane są wszystkie dane dotyczące pogody.
+Next, the geographical coordinates are sent to the Dark Sky API, which returns all the weather data.
 
-Jeśli pogoda dotyczy polskiego miasta, z Airly zostają pobrane informacje o jakości powietrza i stężeniu pyłków PM1, PM2,5 i PM10 z czujników znajdujących się w danej miejscowości.
+If the weather data concerns a Polish city, Airly provides information on air quality and particulate matter concentrations (PM1, PM2.5, PM10) from sensors located in that city.
 
 ![autoLocalization](https://user-images.githubusercontent.com/55457173/81742608-aad53880-94a0-11ea-9f94-cd9a6530a3e7.gif)
